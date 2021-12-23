@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Addin</Text>
+    <Description>Some description for RoomAutomation</Description>
+    <Assembly>E:\Revit Plugin\RoomAutomation\RoomAutomation\bin\Debug\RoomAutomation.dll</Assembly>
+    <FullClassName>RoomAutomation.Command</FullClassName>
+    <ClientId>7cf90b11-11ed-4b0b-8752-4d6c0d89a439</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Addin</Name>
+    <Assembly>E:\Revit Plugin\RoomAutomation\RoomAutomation\bin\Debug\RoomAutomation.dll</Assembly>
+    <FullClassName>RoomAutomation.App</FullClassName>
+    <ClientId>45bb3592-91c2-4421-9367-5dd70b067e2b</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>

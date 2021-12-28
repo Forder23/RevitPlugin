@@ -36,7 +36,11 @@ namespace FurnitureAutomation.Helper
         {
             try
             {
-                PathOfTheCreatedPDF = "E:\\Revit Plugin\\FurnitureAutomation\\Documents\\TextualDisplay.pdf";
+                DirectoryInfo CurrentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+                string format = "Mddyyyyhhmmsstt";
+                string CreatedAt = DateTime.Now.ToString(format);
+                PathOfTheCreatedPDF = Path.Combine(CurrentDirectory.Parent.Parent.Parent.FullName, 
+                                                    $@"Documents\FurnitureByTypes_{CreatedAt}.pdf");
 
                 iTextSharp.text.Document _PDFDocument = new iTextSharp.text.Document(PageSize.A4, 10, 10, 30, 30);
                 PdfWriter _PDFWriter = PdfWriter.GetInstance(_PDFDocument, new FileStream(PathOfTheCreatedPDF, FileMode.Create));
@@ -50,6 +54,11 @@ namespace FurnitureAutomation.Helper
 
                 FurnitureMethodsHelper Furniture = new FurnitureMethodsHelper(_CommandData);
                 Dictionary<string, List<FamilyInstance>> FetchedFurniture = Furniture.GetFurnitureOnTheActiveView(_RevitDocument);
+
+                if (FetchedFurniture == null)
+                {
+                    return null;
+                }
 
                 foreach (KeyValuePair<string, List<FamilyInstance>> item in FetchedFurniture)
                 {
@@ -73,7 +82,6 @@ namespace FurnitureAutomation.Helper
             }
             catch (Exception)
             {
-
                 return null;
             }
             

@@ -5,6 +5,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -29,8 +30,13 @@ namespace RoomAutomation
             // Optionally, other properties may be assigned to the button
             // a) tool-tip
             pushButton.ToolTip = "Automation Room";
+
+            DirectoryInfo CurrentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+            string RoomAutomationPluginLogoLocation = Path
+                .Combine(CurrentDirectory.Parent.Parent.Parent.Parent.FullName, @"Plugin Logos\Rafaelo.jpg");
+
             // b) large bitmap
-            Uri uriImage = new Uri(@"E:\Revit Plugin\RoomAutomation\Plugin Logos\Rafaelo.jpg");
+            Uri uriImage = new Uri(RoomAutomationPluginLogoLocation);
             BitmapImage largeImage = new BitmapImage(uriImage);
             pushButton.LargeImage = largeImage;
 

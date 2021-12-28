@@ -3,7 +3,7 @@
   <AddIn Type="Command">
     <Text>Addin</Text>
     <Description>Some description for FurnitureAutomation</Description>
-    <Assembly>E:\Revit Plugin\FurnitureAutomation\FurnitureAutomation\bin\Debug\FurnitureAutomation.dll</Assembly>
+    <Assembly>E:\Revit Plugin\RevitPluginRepository\FurnitureAutomation\FurnitureAutomation\bin\Debug\FurnitureAutomation.dll</Assembly>
     <FullClassName>FurnitureAutomation.Command</FullClassName>
     <ClientId>b895476f-792f-4db4-8729-39fb92af4c50</ClientId>
     <VendorId>com.typepad.thebuildingcoder</VendorId>
@@ -11,7 +11,7 @@
   </AddIn>
   <AddIn Type="Application">
     <Name>Addin</Name>
-    <Assembly>E:\Revit Plugin\FurnitureAutomation\FurnitureAutomation\bin\Debug\FurnitureAutomation.dll</Assembly>
+    <Assembly>E:\Revit Plugin\RevitPluginRepository\FurnitureAutomation\FurnitureAutomation\bin\Debug\FurnitureAutomation.dll</Assembly>
     <FullClassName>FurnitureAutomation.App</FullClassName>
     <ClientId>c1188e62-3a48-4923-9183-8a62dc5e3d6a</ClientId>
     <VendorId>com.typepad.thebuildingcoder</VendorId>

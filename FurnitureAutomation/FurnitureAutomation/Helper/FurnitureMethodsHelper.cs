@@ -26,9 +26,8 @@ namespace FurnitureAutomation.Helper
 
         public Dictionary<string,List<FamilyInstance>> GetFurnitureOnTheActiveView(Autodesk.Revit.DB.Document _revitDocument)
         {
-            List<FamilyInstance> Furniture = new FilteredElementCollector(_revitDocument)
+            List<FamilyInstance> Furniture = new FilteredElementCollector(_revitDocument, _revitDocument.ActiveView.Id)
                     .OfClass(typeof (FamilyInstance))
-                    .ToElements()
                     .Cast<FamilyInstance>()
                     .ToList();
 

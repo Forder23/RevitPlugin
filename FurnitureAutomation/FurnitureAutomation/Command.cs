@@ -6,6 +6,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using FurnitureAutomation.Helper;
 using FurnitureAutomation.UI.Displays;
+using FurnitureAutomation.UI.ExceptionHandle;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,32 +29,20 @@ namespace FurnitureAutomation
             Application _RevitApplication = _RevitUIApplication.Application;
             Document _RevitDocument = _RevitUIDocument.Document;
 
-            //Fetch the elements into List<Element>
-            FurnitureMethodsHelper Furniture = new FurnitureMethodsHelper(commandData);
-            Dictionary<string,List<FamilyInstance>>FetchedFurniture= Furniture.GetFurnitureOnTheActiveView(_RevitDocument);
-
-            //Start WinForm
-            Frm_ChooseDisplay display = new Frm_ChooseDisplay(commandData);
-            display.ShowDialog();
-            //Pick the way for displaying elements
-
-            // Retrieve elements from database
-
-            //FilteredElementCollector col
-            //  = new FilteredElementCollector(doc)
-            //    .WhereElementIsNotElementType()
-            //    .OfCategory(BuiltInCategory.INVALID)
-            //    .OfClass(typeof(Wall));
-
-            //// Filtered element collector is iterable
-
-            //foreach (Element e in col)
-            //{
-            //    Debug.Print(e.Name);
-            //}
-
-            TaskDialog.Show("Furniture display", "Successfull command", TaskDialogCommonButtons.Ok);
-            return Result.Succeeded;
+            try
+            {
+                //Start WinForm
+                Frm_ChooseDisplay display = new Frm_ChooseDisplay(commandData);
+                display.ShowDialog();
+                return Result.Succeeded;
+            }
+            catch (Exception)
+            {
+                Frm_NullException error = new Frm_NullException();
+                error.ShowDialog();
+                return Result.Failed;
+            }
+            
         }
     }
 }

@@ -33,8 +33,8 @@ namespace FurnitureAutomation.UI.Displays
         private void Btn_GeneratePDF_Click(object sender, EventArgs e)
         {
             PDFGenerator _PDFGenerator = new PDFGenerator(_CommandData);
-            iTextSharp.text.Document GeneraterPDF = _PDFGenerator.GeneratePDFDoc();
-            if (GeneraterPDF != null)
+            iTextSharp.text.Document GeneratorrPDF = _PDFGenerator.GeneratePDFDoc();
+            if (GeneratorrPDF != null)
             {
                 MessageBox.Show($"Successfully created PDF document on location: {_PDFGenerator.GetPath()}", "Info",MessageBoxButtons.OK);
             }

@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.UI;
+using FurnitureAutomation.UI.ExceptionHandle;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,20 +32,46 @@ namespace FurnitureAutomation.UI.Displays
 
         private void Btn_GridDisplay_Click(object sender, EventArgs e)
         {
-            Frm_DatagridDisplay GridDisplay = new Frm_DatagridDisplay(_CommandData);
-            GridDisplay.ShowDialog();
+            try
+            {
+                Frm_DatagridDisplay GridDisplay = new Frm_DatagridDisplay(_CommandData);
+                GridDisplay.ShowDialog();
+            }
+            catch (Exception)
+            {
+                Frm_NullException error = new Frm_NullException();
+                error.ShowDialog();
+            }
+            
         }
 
         private void Btn_TreeDisplay_Click(object sender, EventArgs e)
         {
-            Frm_TreeDisplay TreeDisplay = new Frm_TreeDisplay(_CommandData);
-            TreeDisplay.ShowDialog();
+            try
+            {
+                Frm_TreeDisplay TreeDisplay = new Frm_TreeDisplay(_CommandData);
+                TreeDisplay.ShowDialog();
+            }
+            catch (Exception)
+            {
+                Frm_NullException error = new Frm_NullException();
+                error.ShowDialog();
+            }
         }
 
         private void Btn_TextualDisplay_Click(object sender, EventArgs e)
         {
-            Frm_TextualDisplay PDFDisplay = new Frm_TextualDisplay(_CommandData);
-            PDFDisplay.ShowDialog();
+            try
+            {
+                Frm_TextualDisplay PDFDisplay = new Frm_TextualDisplay(_CommandData);
+                PDFDisplay.ShowDialog();
+            }
+            catch (Exception)
+            {
+                Frm_NullException error = new Frm_NullException();
+                error.ShowDialog();
+            }
+            
         }
     }
 }

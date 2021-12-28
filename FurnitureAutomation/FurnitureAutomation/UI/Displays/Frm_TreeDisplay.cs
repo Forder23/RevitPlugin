@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using FurnitureAutomation.Helper;
+using FurnitureAutomation.UI.ExceptionHandle;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,19 +35,29 @@ namespace FurnitureAutomation.UI.Displays
 
         private void MakeTree()
         {
-            FurnitureMethodsHelper Furniture = new FurnitureMethodsHelper(_CommandData);
-            Dictionary<string, List<FamilyInstance>> FetchedFurniture = Furniture.GetFurnitureOnTheActiveView(_RevitDocument);
-
-            foreach (KeyValuePair<string,List<FamilyInstance>> item in FetchedFurniture)
+            try
             {
-                TreeNode TopNode = new TreeNode(item.Key.ToString());
-                foreach (FamilyInstance piece in item.Value)
+                FurnitureMethodsHelper Furniture = new FurnitureMethodsHelper(_CommandData);
+                Dictionary<string, List<FamilyInstance>> FetchedFurniture = Furniture.GetFurnitureOnTheActiveView(_RevitDocument);
+
+                foreach (KeyValuePair<string, List<FamilyInstance>> item in FetchedFurniture)
                 {
-                    TreeNode TopNodeChild = TopNode.Nodes.Add($"Floor {piece.Room.Level.Name}");
-                    TopNodeChild.Nodes.Add($"Room {piece.Room.Number}");
+                    TreeNode TopNode = new TreeNode(item.Key.ToString());
+                    foreach (FamilyInstance piece in item.Value)
+                    {
+                        TreeNode TopNodeChild = TopNode.Nodes.Add($"Floor {piece.Room.Level.Name}");
+                        TopNodeChild.Nodes.Add($"Room {piece.Room.Number}");
+                    }
+                    TView_Furniture.Nodes.Add(TopNode);
                 }
-                TView_Furniture.Nodes.Add(TopNode);
             }
+            catch (Exception)
+            {
+                Frm_NullException error = new Frm_NullException();
+                error.ShowDialog();
+                return;
+            }
+            
         }
 
         private void Btn_GenerateTreeView_Click(object sender, EventArgs e)

@@ -7,6 +7,8 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using RoomAutomation.Helper;
 using RoomAutomation.UI;
+using RoomAutomation.UI.ExceptionHandle;
+using RoomAutomation.UI.SuccessHandle;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,17 +28,31 @@ namespace RoomAutomation
           ref string message,
           ElementSet elements)
         {
-            //start WinForm application
-            Frm_RoomNumbering frm_RoomsNumberGenerator = new Frm_RoomNumbering(commandData);
-            frm_RoomsNumberGenerator.ShowDialog();
-            //take user input
-            _StartingRoomsNumber = frm_RoomsNumberGenerator.StartingRoomNumber;
-            //make a function that gets all of the rooms, sorts them and give numbers            
-            _RoomHelper = new RoomHelperMethods(commandData);
-            _RoomHelper.GenerateNextRoomNumber(_StartingRoomsNumber);
+            try
+            {
+                //start WinForm application
+                Frm_RoomNumbering frm_RoomsNumberGenerator = new Frm_RoomNumbering(commandData);
+                frm_RoomsNumberGenerator.ShowDialog();
+                //take user input
+                _StartingRoomsNumber = frm_RoomsNumberGenerator.StartingRoomNumber;
+                //make a function that gets all of the rooms, sorts them and give numbers            
+                _RoomHelper = new RoomHelperMethods(commandData);
+                bool RoomNumberChanged = _RoomHelper.GenerateNextRoomNumber(_StartingRoomsNumber);
 
-            TaskDialog.Show("Room automation", "Successfull command", TaskDialogCommonButtons.Ok);
-            return Result.Succeeded;
+                if (RoomNumberChanged == true)
+                {
+                    Frm_Success info = new Frm_Success();
+                    info.ShowDialog();
+                    return Result.Succeeded;
+                }
+                return Result.Failed;
+            }
+            catch (Exception)
+            {
+                Frm_NullException error = new Frm_NullException();
+                error.ShowDialog();
+                return Result.Failed;
+            }
         }
 
         

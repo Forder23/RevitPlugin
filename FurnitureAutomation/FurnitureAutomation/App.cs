@@ -5,6 +5,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -29,8 +30,12 @@ namespace FurnitureAutomation
             // Optionally, other properties may be assigned to the button
             // a) tool-tip
             pushButton.ToolTip = "Display Furniture";
+
+            DirectoryInfo CurrentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+            string FurnitureAutomationPluginLogoLocation = Path
+                .Combine(CurrentDirectory.Parent.Parent.Parent.Parent.FullName,@"Plugin Logos\Ranko_JR_1.jpg");
             // b) large bitmap
-            Uri uriImage = new Uri(@"E:\Revit Plugin\RoomAutomation\Plugin Logos\Ranko JR 1.jpg");
+            Uri uriImage = new Uri(FurnitureAutomationPluginLogoLocation);
             BitmapImage largeImage = new BitmapImage(uriImage);
             pushButton.LargeImage = largeImage;
 

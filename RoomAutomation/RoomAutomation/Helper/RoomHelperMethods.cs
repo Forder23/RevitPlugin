@@ -25,51 +25,27 @@ namespace RoomAutomation.Helper
             _RevitApp = _RevitUIApp.Application;
             _RevitDocument = _RevitUIDoc.Document;
         }
-        public void GenerateNextRoomNumber(int startingRoomNumber)
+        public bool GenerateNextRoomNumber(int startingRoomNumber)
         {
-            int CurrentStartingRoomNumber = 0;
-            int TempCurrentStartingRoomNumber = startingRoomNumber;
-            Dictionary<string,List<Room>> Rooms = GetRooms(_RevitDocument);
+            bool RoomsExist = false;
+            Dictionary<int,List<Room>> Rooms = GetRooms(_RevitDocument);
 
             if (Rooms.Count > 0)
             {
-                //make a check is the number used by other room or the room is located at the other floor
-                //if is on the other floor multiply by 100
                 using (Transaction tx = new Transaction(_RevitDocument))
                 {
                     if (tx.Start("Modify rooms number") == TransactionStatus.Started)
                     {
-                        foreach (KeyValuePair<string, List<Room>> roomItems in Rooms.OrderBy(lvl => lvl.Key)) //sort rooms by the floor
+                        foreach (KeyValuePair<int, List<Room>> roomItems in Rooms.OrderBy(lvl => lvl.Key)) //sort rooms by the floor
                         {
                             foreach (Room room in roomItems.Value)
                             {
+                                room.Number = (++startingRoomNumber).ToString(); //Set free RoomNumber through calculation
+                                ///TO DO///
                                 
-                                if (int.Parse(roomItems.Key) > 1)
-                                {
-                                    startingRoomNumber = CurrentStartingRoomNumber++;
-                                    while (int.Parse(room.Number) == startingRoomNumber)
-                                    {
-                                        startingRoomNumber++; //while RoomNumber is taken increment RoomNumber
-                                        CurrentStartingRoomNumber = startingRoomNumber;
-                                    }
-                                    int FloorLevel = int.Parse(roomItems.Key);
-                                    room.Number = CalculateRoomNumber(FloorLevel, startingRoomNumber).ToString(); //Set free RoomNumber through calculation
-                                }
-                                else if (int.Parse(roomItems.Key) == 1)
-                                {
-                                    startingRoomNumber = CurrentStartingRoomNumber++;
-                                    while (int.Parse(room.Number) == startingRoomNumber)
-                                    {
-                                        startingRoomNumber++; //while RoomNumber is taken increment RoomNumber
-                                        CurrentStartingRoomNumber = startingRoomNumber;
-                                    }
-                                    int FloorLevel = int.Parse(roomItems.Key);
-                                    room.Number = CalculateRoomNumber(FloorLevel, startingRoomNumber).ToString(); //Set free RoomNumber through calculation
-                                }
-                                else
-                                {
-                                    room.Number = (startingRoomNumber++).ToString();
-                                }
+                                //Implement changing background of the floor for each room
+                                //as an indicator that something is going on in the background!!
+                                RoomsExist = true;
                             }
                         }
                     }
@@ -77,13 +53,17 @@ namespace RoomAutomation.Helper
                     {
                         tx.RollBack();
                     }
-                    tx.Commit();
+                        tx.Commit();
                 }
             }
-            return;
+            else
+            {
+                RoomsExist = false;
+            }
+            return RoomsExist;
         }
 
-        public Dictionary<string, List<Room>> GetRooms(Autodesk.Revit.DB.Document document)
+        public Dictionary<int, List<Room>> GetRooms(Autodesk.Revit.DB.Document document)
         {
             try
             {
@@ -95,21 +75,16 @@ namespace RoomAutomation.Helper
                     .ToList();
 
                 var GroupedRooms = Rooms
-                    .GroupBy(lvl => lvl.Level.Name.Substring(6)) // Group Rooms by the Floor
+                    .OrderBy(x => x.Number)
+                    .GroupBy(lvl => int.Parse(lvl.Level.Id.ToString())) // Group Rooms by the Floor
                     .ToDictionary(rooms => rooms.Key, rooms => rooms.ToList());
-
-                return GroupedRooms;
+                    
+                return GroupedRooms == null ? null : GroupedRooms;
             }
             catch (Exception)
             {
-                throw;
+                return null;
             }          
-        }
-
-        public int CalculateRoomNumber(int floorLvl, int RoomNumber)
-        {
-            return (floorLvl * __MAX_ROOMS_ON_THE_FLOOR) + RoomNumber;
-        }
-            
+        }            
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,17 +31,19 @@ namespace FurnitureAutomation.UI.Displays
             _RevitDocument = _RevitUIDoc.Document;
         }
 
-        private void Btn_GeneratePDF_Click(object sender, EventArgs e)
+        private iTextSharp.text.Document Btn_GeneratePDF_Click(object sender, EventArgs e)
         {
             PDFGenerator _PDFGenerator = new PDFGenerator(_CommandData);
-            iTextSharp.text.Document GeneratorrPDF = _PDFGenerator.GeneratePDFDoc();
-            if (GeneratorrPDF != null)
+            iTextSharp.text.Document GeneratorPDF = _PDFGenerator.GeneratePDFDoc();
+            if (GeneratorPDF != null)
             {
-                MessageBox.Show($"Successfully created PDF document on location: {_PDFGenerator.GetPath()}", "Info",MessageBoxButtons.OK);
+                MessageBox.Show($"Successfully created PDF document on location: {_PDFGenerator.GetPath()}.", "Info",MessageBoxButtons.OK);
+                return GeneratorPDF;
             }
             else
             {
                 MessageBox.Show($"PDF Document isn't created: {_PDFGenerator.GetPath()}", "Warning", MessageBoxButtons.OKCancel);
+                return null;
             }
         }
     }

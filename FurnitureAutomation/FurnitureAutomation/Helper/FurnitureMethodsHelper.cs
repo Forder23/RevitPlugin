@@ -26,10 +26,11 @@ namespace FurnitureAutomation.Helper
 
         public Dictionary<string,List<FamilyInstance>> GetFurnitureOnTheActiveView(Autodesk.Revit.DB.Document _revitDocument)
         {
+            
             List<FamilyInstance> Furniture = new FilteredElementCollector(_revitDocument, _revitDocument.ActiveView.Id)
-                    .OfClass(typeof (FamilyInstance))
-                    .Cast<FamilyInstance>()
-                    .ToList();
+                .OfCategory(BuiltInCategory.OST_Furniture)    
+                .Cast<FamilyInstance>()
+                .ToList();
 
             var GroupedFurniture = Furniture
                     .GroupBy(f => f.Symbol.FamilyName) // Group Rooms by the Floor
